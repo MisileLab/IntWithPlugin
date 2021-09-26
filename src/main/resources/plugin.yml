@@ -1,7 +1,6 @@
-name: ${pluginName}
+name: IntWithPlugin
 version: ${version}
-main: ${group}.${packageName}.plugin.${pluginName}Plugin
+main: ${group}.IntWithPlugin
 api-version: 1.17
 libraries:
-  - org.jetbrains.kotlin:kotlin-stdlib:1.5.30
-  - org.jetbrains.kotlin:kotlin-reflect:1.5.30
+  - io.github.monun:kommand:2.6.6
