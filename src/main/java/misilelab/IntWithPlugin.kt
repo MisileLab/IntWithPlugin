@@ -88,7 +88,7 @@ class IntWithPlugin: JavaPlugin() {
                     }
                 }
             }
-            register("veiwer") {
+            register("viewer") {
                 then("add") {
                     then("player" to player()) {
                         executes { context ->

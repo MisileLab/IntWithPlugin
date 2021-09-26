@@ -1,6 +1,7 @@
 plugins {
     java
     kotlin("jvm") version "1.5.21"
+    kotlin("plugin.serialization") version "1.5.21"
     id("com.github.johnrengelman.shadow") version "7.0.0"
 }
 
@@ -10,21 +11,23 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.5.21")
-    implementation("io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT")
     implementation("io.github.monun:kommand-api:2.6.6")
-    implementation("com.github.kittinunf.fuel:fuel:2.3.1")
 }
 
 project.extra.set("packageName", name.replace(" -", ""))
 project.extra.set("pluginName", name.split('-').joinToString("") { it.capitalize() })
 
 tasks {
+    compileKotlin {
+        kotlinOptions.jvmTarget = "16"
+    }
     processResources {
         filesMatching("**/*.yml") {
             expand(project.properties)
             expand(project.extra.properties)
         }
+        filteringCharset = "UTF-8"
     }
 
     create<Jar>("paperJar") {

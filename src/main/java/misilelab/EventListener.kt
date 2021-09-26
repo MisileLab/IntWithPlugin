@@ -1,17 +1,19 @@
 package misilelab
 
 import org.bukkit.GameMode
+import org.bukkit.entity.EntityType
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
-import org.bukkit.event.entity.PlayerDeathEvent
+import org.bukkit.event.entity.EntityDeathEvent
 
 class EventListener: Listener {
     private var teamintlife = 5
     private var notteamintlife = 5
     @EventHandler
-    fun onDeath(e: PlayerDeathEvent) {
-        val player = e.entity
-        if (player.killer != null) {
+    fun onDeath(e: EntityDeathEvent) {
+        if (((e.entity.killer == null) || (e.entity.killer!!.type == EntityType.PLAYER)) && (e.entity.type == EntityType.PLAYER)) {
+            val player: Player = e.entity as Player
             if (player.name in player.scoreboard.getTeam("intteam")!!.entries) {
                 if (teamintlife <= 0) {
                     player.gameMode = GameMode.SPECTATOR
