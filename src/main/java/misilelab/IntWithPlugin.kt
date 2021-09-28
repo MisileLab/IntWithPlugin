@@ -172,7 +172,7 @@ class IntWithPlugin: JavaPlugin() {
                             nonestring = "$nonestring$i, "
                         }
                     }
-                    if (nonestring == "") {
+                    if (nonestring != "") {
                         player.sendMessage("$nonestring 이라는 사람(들)이 아직 팀에 참여하지 않았습니다.")
                     }
                     else {
