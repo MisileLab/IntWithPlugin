@@ -56,10 +56,10 @@ class EventListener: Listener {
 
     fun teammessage(intteam: Boolean, player: Player, message: String) {
         for (i in player.world.players) {
-            if (i.name in player.scoreboard.getTeam("notteamint")!!.entries && !intteam) {
+            if (i.name in player.scoreboard.getTeam("notintteam")!!.entries && !intteam) {
                 player.sendMessage(message)
             }
-            else if (i.name in player.scoreboard.getTeam("teamint")!!.entries && intteam) {
+            else if (i.name in player.scoreboard.getTeam("intteam")!!.entries && intteam) {
                 player.sendMessage(message)
             }
         }
