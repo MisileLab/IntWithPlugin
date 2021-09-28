@@ -30,11 +30,11 @@ class IntWithPlugin: JavaPlugin() {
                             val playersender: Player = sender as Player
                             val scoreboard: Scoreboard = player.scoreboard
                             var team = scoreboard.getTeam("intteam")
-                            if (team != null) {
+                            if (team == null) {
                                 team = scoreboard.registerNewTeam("intteam")
                                 team.setAllowFriendlyFire(false)
                             }
-                            if (!hasname(player.name, team!!)) {
+                            if (!hasname(player.name, team)) {
                                 team.addEntry(player.name)
                                 playersender.sendMessage("플레이어가 팀에 넣어졌습니다.")
                             }
@@ -51,7 +51,7 @@ class IntWithPlugin: JavaPlugin() {
                             val playersender: Player = sender as Player
                             val scoreboard: Scoreboard = player.scoreboard
                             var team = scoreboard.getTeam("intteam")
-                            if (team != null) {
+                            if (team == null) {
                                 team = scoreboard.registerNewTeam("intteam")
                                 team!!.setAllowFriendlyFire(false)
                             }
@@ -96,7 +96,7 @@ class IntWithPlugin: JavaPlugin() {
                             val playersender: Player = sender as Player
                             val scoreboard: Scoreboard = player.scoreboard
                             var team = scoreboard.getTeam("notintteam")
-                            if (team != null) {
+                            if (team == null) {
                                 team = scoreboard.registerNewTeam("notintteam")
                                 team!!.setAllowFriendlyFire(false)
                             }
@@ -117,7 +117,7 @@ class IntWithPlugin: JavaPlugin() {
                             val playersender: Player = sender as Player
                             val scoreboard: Scoreboard = player.scoreboard
                             var team = scoreboard.getTeam("notintteam")
-                            if (team != null) {
+                            if (team == null) {
                                 team = scoreboard.registerNewTeam("notintteam")
                                 team!!.setAllowFriendlyFire(false)
                             }
