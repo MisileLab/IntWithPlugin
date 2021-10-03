@@ -192,10 +192,10 @@ class IntWithPlugin: JavaPlugin() {
                     }
                     else {
                         for (i in teamint!!.entries) {
-                            player.bedSpawnLocation = teamintlocation
+                            player.bedSpawnLocation = teamintlocation!!
                         }
                         for (i in teamviewer!!.entries) {
-                            player.bedSpawnLocation = notteamintlocation
+                            player.bedSpawnLocation = notteamintlocation!!
                         }
                         EventListener().setlife((lifeobject.teamintlife), (lifeobject.notteamintlife))
                         player.sendMessage("세팅이 완료되었습니다!")
