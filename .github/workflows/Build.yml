@@ -1,0 +1,28 @@
+name: Plugin build
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 16
+      uses: actions/setup-java@v2
+      with:
+        java-version: '16'
+        distribution: 'adopt'
+        cache: gradle
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    - name: Build in Plugin
+      run: ./gradlew build
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v1
+      with:
+        name: build-artifacts
+        path: build/libs
