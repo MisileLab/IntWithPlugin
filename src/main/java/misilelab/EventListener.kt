@@ -54,7 +54,7 @@ class EventListener: Listener {
         notteamintlife = 5
     }
 
-    fun teammessage(intteam: Boolean, player: Player, message: String) {
+    private fun teammessage(intteam: Boolean, player: Player, message: String) {
         for (i in player.world.players) {
             if (i.name in player.scoreboard.getTeam("notintteam")!!.entries && !intteam) {
                 player.sendMessage(message)
