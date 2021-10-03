@@ -2,11 +2,19 @@ package misilelab
 
 import io.github.monun.kommand.getValue
 import io.github.monun.kommand.kommand
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.bukkit.Location
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scoreboard.Scoreboard
 import org.bukkit.scoreboard.Team
+import java.io.File
+
+@Serializable
+data class Life(val teamintlife: Int, val notteamintlife: Int)
 
 @Suppress("unused")
 class IntWithPlugin: JavaPlugin() {
@@ -162,6 +170,13 @@ class IntWithPlugin: JavaPlugin() {
                     val teamint = scoreboard.getTeam("intteam")
                     val teamviewer = scoreboard.getTeam("notintteam")
                     var nonestring = ""
+                    val file = File("data.json")
+                    val lifeobject: Life = if (!file.isFile) {
+                        Life(30, 30)
+                    } else {
+                        Json.decodeFromString(file.readText())
+                    }
+                    print(lifeobject)
                     for (i in player.world.players) {
                         if (!(hasname(player.name, teamint!!) || hasname(player.name, teamviewer!!))) {
                             noneplayers.add(i)
@@ -182,13 +197,21 @@ class IntWithPlugin: JavaPlugin() {
                         for (i in teamviewer!!.entries) {
                             player.bedSpawnLocation = notteamintlocation
                         }
-                        EventListener().resetlife()
+                        EventListener().setlife((lifeobject.teamintlife), (lifeobject.notteamintlife))
                         player.sendMessage("세팅이 완료되었습니다!")
                     }
                 }
             }
         }
         server.pluginManager.registerEvents(EventListener(), this)
+    }
+
+    override fun onDisable() {
+        val a: Life? = EventListener().getlife()
+        if (a != null) {
+            val string = Json.encodeToString(a)
+            File("data.json").writeText(string)
+        }
     }
 }
 

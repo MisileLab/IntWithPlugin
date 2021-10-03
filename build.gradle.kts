@@ -13,6 +13,7 @@ repositories {
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT")
     implementation("io.github.monun:kommand-api:2.6.6")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
 }
 
 project.extra.set("packageName", name.replace(" -", ""))

@@ -50,9 +50,9 @@ class EventListener: Listener {
             player.sendMessage("당신은 채팅을 칠 수 없습니다.")
         }
     }
-    fun resetlife() {
-        teamintlife = 30
-        notteamintlife = 30
+    fun setlife(teamintlifea: Int, notteamintlifea: Int) {
+        teamintlife = teamintlifea
+        notteamintlife = notteamintlifea
     }
 
     private fun teammessage(intteam: Boolean, player: Player, message: String) {
@@ -63,6 +63,14 @@ class EventListener: Listener {
             else if (i.name in player.scoreboard.getTeam("intteam")!!.entries && intteam) {
                 player.sendMessage(message)
             }
+        }
+    }
+
+    fun getlife(): Life? {
+        return if (teamintlife == null && notteamintlife == null) {
+            null
+        } else {
+            Life(teamintlife!!, notteamintlife!!)
         }
     }
 }
