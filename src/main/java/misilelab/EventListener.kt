@@ -11,8 +11,8 @@ import org.bukkit.event.entity.EntityDeathEvent
 var nochatting = mutableListOf<Player>()
 
 class EventListener: Listener {
-    private var teamintlife = 5
-    private var notteamintlife = 5
+    private var teamintlife = 30
+    private var notteamintlife = 30
     @EventHandler
     fun onDeath(e: EntityDeathEvent) {
         if (((e.entity.killer == null) || (e.entity.killer!!.type == EntityType.PLAYER)) && (e.entity.type == EntityType.PLAYER)) {
