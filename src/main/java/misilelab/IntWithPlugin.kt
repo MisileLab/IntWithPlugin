@@ -191,14 +191,19 @@ class IntWithPlugin: JavaPlugin() {
                         player.sendMessage("$nonestring 이라는 사람(들)이 아직 팀에 참여하지 않았습니다.")
                     }
                     else {
-                        for (i in teamint!!.entries) {
-                            player.bedSpawnLocation = teamintlocation!!
+                        if ((teamintlocation == null ) || (notteamintlocation == null)) {
+                            player.sendMessage("두 팀의 스폰포인트 위치가 정해지지 않았어요!")
                         }
-                        for (i in teamviewer!!.entries) {
-                            player.bedSpawnLocation = notteamintlocation!!
+                        else {
+                            for (i in teamint!!.entries) {
+                                player.bedSpawnLocation = teamintlocation
+                            }
+                            for (i in teamviewer!!.entries) {
+                                player.bedSpawnLocation = notteamintlocation
+                            }
+                            EventListener().setlife((lifeobject.teamintlife), (lifeobject.notteamintlife))
+                            player.sendMessage("세팅이 완료되었습니다!")
                         }
-                        EventListener().setlife((lifeobject.teamintlife), (lifeobject.notteamintlife))
-                        player.sendMessage("세팅이 완료되었습니다!")
                     }
                 }
             }

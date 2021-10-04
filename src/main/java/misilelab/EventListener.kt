@@ -67,10 +67,6 @@ class EventListener: Listener {
     }
 
     fun getlife(): Life? {
-        return if (teamintlife == null && notteamintlife == null) {
-            null
-        } else {
-            Life(teamintlife!!, notteamintlife!!)
-        }
+        return if (teamintlife == null || notteamintlife == null) null else Life(teamintlife!!, notteamintlife!!)
     }
 }
