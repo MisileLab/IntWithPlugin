@@ -171,11 +171,12 @@ class IntWithPlugin: JavaPlugin() {
                     val teamviewer = scoreboard.getTeam("notintteam")
                     var nonestring = ""
                     val file = File("data.json")
-                    val lifeobject: Life = if (!file.isFile) {
+                    val lifeobject = if (!file.isFile) {
                         File("data.json").createNewFile()
                         Life(30, 30)
                     } else {
-                        Json.decodeFromString(file.readText())
+                        @Suppress("RemoveExplicitTypeArguments")
+                        Json.decodeFromString<Life>(file.readText())
                     }
                     print(lifeobject)
                     for (i in player.world.players) {
