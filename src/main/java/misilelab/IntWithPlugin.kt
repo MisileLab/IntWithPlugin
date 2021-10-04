@@ -175,8 +175,7 @@ class IntWithPlugin: JavaPlugin() {
                         File("data.json").createNewFile()
                         Life(30, 30)
                     } else {
-                        @Suppress("RemoveExplicitTypeArguments")
-                        Json.decodeFromString<Life>(file.readText())
+                        Json.decodeFromString(file.readText())
                     }
                     print(lifeobject)
                     for (i in player.world.players) {
