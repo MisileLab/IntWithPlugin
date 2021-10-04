@@ -179,7 +179,7 @@ class IntWithPlugin: JavaPlugin() {
                     }
                     print(lifeobject)
                     for (i in player.world.players) {
-                        if (!(hasname(player.name, teamint!!) || hasname(player.name, teamviewer!!))) {
+                        if (!(hasname(player.name, teamint!!) || hasname(player.name, teamviewer))) {
                             noneplayers.add(i)
                         }
                     }
@@ -221,12 +221,14 @@ class IntWithPlugin: JavaPlugin() {
     }
 }
 
-fun hasname(name: String, team: Team): Boolean {
+fun hasname(name: String, team: Team?): Boolean {
     var result = false
-    for (i in team.entries) {
-        if (i == name) {
-            result = true
-            break
+    if (team != null) {
+        for (i in team.entries) {
+            if (i == name) {
+                result = true
+                break
+            }
         }
     }
     return result
