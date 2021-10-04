@@ -77,7 +77,7 @@ class IntWithPlugin: JavaPlugin() {
                     then("x" to double()) {
                         executes { context ->
                             val x: Double by context
-                            notteamintx = x
+                            teamintx = x
                         }
                         then("y" to double()) {
                             executes { context ->
