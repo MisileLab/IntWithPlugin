@@ -172,6 +172,7 @@ class IntWithPlugin: JavaPlugin() {
                     var nonestring = ""
                     val file = File("data.json")
                     val lifeobject: Life = if (!file.isFile) {
+                        File("data.json").createNewFile()
                         Life(30, 30)
                     } else {
                         Json.decodeFromString(file.readText())
