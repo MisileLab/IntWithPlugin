@@ -1,20 +1,21 @@
+@file:Suppress("PLUGIN_IS_NOT_ENABLED")
+
 package misilelab
 
 import io.github.monun.kommand.getValue
 import io.github.monun.kommand.kommand
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import org.bukkit.Location
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scoreboard.Scoreboard
 import org.bukkit.scoreboard.Team
-import java.io.File
+import java.io.FileInputStream
+import java.io.FileNotFoundException
+import java.util.*
+import kotlin.io.path.Path
+import kotlin.io.path.createFile
+import kotlin.io.path.writeLines
 
-@Serializable
-data class Life(val teamintlife: Int, val notteamintlife: Int)
 
 @Suppress("unused")
 class IntWithPlugin: JavaPlugin() {
@@ -170,14 +171,17 @@ class IntWithPlugin: JavaPlugin() {
                     val teamint = scoreboard.getTeam("intteam")
                     val teamviewer = scoreboard.getTeam("notintteam")
                     var nonestring = ""
-                    val file = File("data.json")
-                    val lifeobject = if (!file.isFile) {
-                        File("data.json").createNewFile()
-                        Life(30, 30)
-                    } else {
-                        Json.decodeFromString(file.readText())
+                    try {
+                        FileInputStream("data.properties")
+                    } catch (ex: FileNotFoundException) {
+                        val lines = mutableListOf("intteamlife=30", "notintteamlife=30")
+                        Path("data.properties").createFile().writeLines(lines)
                     }
-                    print(lifeobject)
+                    val file = FileInputStream("C:pathconfig.properties")
+                    val prop = Properties()
+                    prop.load(file)
+                    val teamintlife = (prop.getProperty("intteamlife")).toInt()
+                    val notteamintlife = (prop.getProperty("notintteamlife")).toInt()
                     for (i in player.world.players) {
                         if (!(hasname(player.name, teamint!!) || hasname(player.name, teamviewer))) {
                             noneplayers.add(i)
@@ -202,21 +206,28 @@ class IntWithPlugin: JavaPlugin() {
                             for (i in teamviewer!!.entries) {
                                 player.bedSpawnLocation = notteamintlocation
                             }
-                            EventListener().setlife((lifeobject.teamintlife), (lifeobject.notteamintlife))
+                            EventListener().setlife((teamintlife), (notteamintlife))
                             player.sendMessage("세팅이 완료되었습니다!")
                         }
                     }
                 }
             }
         }
+        logger.info("plugin enabled")
         server.pluginManager.registerEvents(EventListener(), this)
     }
 
     override fun onDisable() {
-        val a: Life? = EventListener().getlife()
-        if (a != null) {
-            val string = Json.encodeToString(a)
-            File("data.json").writeText(string)
+        val lifeobject: EventListener.Life? = EventListener().getlife()
+        if (lifeobject != null) {
+            try {
+                FileInputStream("data.properties")
+            } catch (ex: FileNotFoundException) {
+                val notintteamlife = lifeobject.notteamintlife
+                val intteamlife = lifeobject.teamintlife
+                val lines = mutableListOf("intteamlife=$intteamlife", "notintteamlife=$notintteamlife")
+                Path("data.properties").createFile().writeLines(lines)
+            }
         }
     }
 }

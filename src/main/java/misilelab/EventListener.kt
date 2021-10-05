@@ -66,6 +66,8 @@ class EventListener: Listener {
         }
     }
 
+    data class Life(val teamintlife: Int, val notteamintlife: Int)
+
     fun getlife(): Life? {
         return if (teamintlife == null || notteamintlife == null) null else Life(teamintlife!!, notteamintlife!!)
     }
