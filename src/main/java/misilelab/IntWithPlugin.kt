@@ -177,7 +177,7 @@ class IntWithPlugin: JavaPlugin() {
                         val lines = mutableListOf("intteamlife=30", "notintteamlife=30")
                         Path("data.properties").createFile().writeLines(lines)
                     }
-                    val file = FileInputStream("C:pathconfig.properties")
+                    val file = FileInputStream("data.properties")
                     val prop = Properties()
                     prop.load(file)
                     val teamintlife = (prop.getProperty("intteamlife")).toInt()
