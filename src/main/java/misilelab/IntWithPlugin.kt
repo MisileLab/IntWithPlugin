@@ -183,7 +183,7 @@ class IntWithPlugin: JavaPlugin() {
                     val teamintlife = (prop.getProperty("intteamlife")).toInt()
                     val notteamintlife = (prop.getProperty("notintteamlife")).toInt()
                     for (i in player.world.players) {
-                        if (!hasname(player.name, teamint!!) || !hasname(player.name, teamviewer)) {
+                        if (!hasname(i.name, teamint!!) || !hasname(i.name, teamviewer!!)) {
                             noneplayers.add(i)
                         }
                     }
