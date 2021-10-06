@@ -32,6 +32,7 @@ class IntWithPlugin: JavaPlugin() {
                             val scoreboard: Scoreboard = player.scoreboard
                             var team = scoreboard.getTeam("intteam")
                             if (team == null) {
+                                logger.info("team is null")
                                 team = scoreboard.registerNewTeam("intteam")
                                 team.setAllowFriendlyFire(false)
                             }
