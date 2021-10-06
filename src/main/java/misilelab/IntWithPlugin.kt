@@ -15,19 +15,11 @@ import java.util.*
 import kotlin.io.path.Path
 import kotlin.io.path.createFile
 import kotlin.io.path.writeLines
+import org.bukkit.Bukkit
 
 
 @Suppress("unused")
 class IntWithPlugin: JavaPlugin() {
-
-    private var teamintx: Double? = null
-    private var teaminty: Double? = null
-    private var teamintz: Double? = null
-    private var teamintlocation: Location? = null
-    private var notteamintx: Double? = null
-    private var notteaminty: Double? = null
-    private var notteamintz: Double? = null
-    private var notteamintlocation: Location? = null
 
     override fun onEnable() {
         kommand {
@@ -70,28 +62,6 @@ class IntWithPlugin: JavaPlugin() {
                             }
                             else {
                                 playersender.sendMessage("플레이어가 팀에 이미 없습니다.")
-                            }
-                        }
-                    }
-                }
-                then("setlocation") {
-                    then("x" to double()) {
-                        executes { context ->
-                            val x: Double by context
-                            teamintx = x
-                        }
-                        then("y" to double()) {
-                            executes { context ->
-                                val y: Double by context
-                                teaminty = y
-                            }
-                            then("z" to double()) {
-                                executes { context ->
-                                    val player: Player = sender as Player
-                                    val z: Double by context
-                                    teamintz = z
-                                    teamintlocation = Location(player.world, teamintx!!, teaminty!!, teamintz!!)
-                                }
                             }
                         }
                     }
@@ -140,28 +110,6 @@ class IntWithPlugin: JavaPlugin() {
                         }
                     }
                 }
-                then("setlocation") {
-                    then("x" to double()) {
-                        executes { context ->
-                            val x: Double by context
-                            notteamintx = x
-                        }
-                        then("y" to double()) {
-                            executes { context ->
-                                val y: Double by context
-                                notteaminty = y
-                            }
-                            then("z" to double()) {
-                                executes { context ->
-                                    val player: Player = sender as Player
-                                    val z: Double by context
-                                    notteamintz = z
-                                    notteamintlocation = Location(player.world, notteamintx!!, notteaminty!!, notteamintz!!)
-                                }
-                            }
-                        }
-                    }
-                }
             }
             register("start") {
                 executes {
@@ -198,19 +146,25 @@ class IntWithPlugin: JavaPlugin() {
                         player.sendMessage("$nonestring 이라는 사람(들)이 아직 팀에 참여하지 않았습니다.")
                     }
                     else {
-                        if ((teamintlocation == null ) || (notteamintlocation == null)) {
-                            player.sendMessage("두 팀의 스폰포인트 위치가 정해지지 않았어요!")
-                        }
-                        else {
-                            for (i in teamint!!.entries) {
-                                player.bedSpawnLocation = teamintlocation
+                        // -250 64 256
+                        val teamintx = ((-1250..1250).random()).toDouble()
+                        val teamintz = ((-1256..1256).random()).toDouble()
+                        val viewerx = teamintx + ((1000..2000).random()).toDouble()
+                        val viewerz = teamintz + ((1000..2000).random()).toDouble()
+                        for (i in teamint!!.entries) {
+                            val playerlol = Bukkit.getPlayer(i)
+                            if (playerlol != null) {
+                                playerlol.bedSpawnLocation = Location(player.world, teamintx, playerlol.location.y, teamintz)
                             }
-                            for (i in teamviewer!!.entries) {
-                                player.bedSpawnLocation = notteamintlocation
-                            }
-                            EventListener().setlife((teamintlife), (notteamintlife))
-                            player.sendMessage("세팅이 완료되었습니다!")
                         }
+                        for (i in teamviewer!!.entries) {
+                            val playerlol = Bukkit.getPlayer(i)
+                            if (playerlol != null) {
+                                playerlol.bedSpawnLocation = Location(player.world, viewerx, playerlol.location.y, viewerz)
+                            }
+                        }
+                        EventListener().setlife((teamintlife), (notteamintlife))
+                        player.sendMessage("세팅이 완료되었습니다!")
                     }
                 }
             }
