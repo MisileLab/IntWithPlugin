@@ -139,7 +139,8 @@ class IntWithPlugin: JavaPlugin() {
                     }
                     if (noneplayers.isNotEmpty()) {
                         for (i in noneplayers) {
-                            nonestring = "$nonestring$i, "
+                            val playername = i.name
+                            nonestring = "$nonestring$playername, "
                         }
                     }
                     if (nonestring != "") {
@@ -147,24 +148,29 @@ class IntWithPlugin: JavaPlugin() {
                     }
                     else {
                         // -250 64 256
-                        val teamintx = ((-1250..1250).random()).toDouble()
-                        val teamintz = ((-1256..1256).random()).toDouble()
-                        val viewerx = teamintx + ((1000..2000).random()).toDouble()
-                        val viewerz = teamintz + ((1000..2000).random()).toDouble()
-                        for (i in teamint!!.entries) {
-                            val playerlol = Bukkit.getPlayer(i)
-                            if (playerlol != null) {
-                                playerlol.bedSpawnLocation = Location(player.world, teamintx, playerlol.location.y, teamintz)
+                        if (teamint != null && teamviewer != null) {
+                            val teamintx = ((-1250..1250).random()).toDouble()
+                            val teamintz = ((-1256..1256).random()).toDouble()
+                            val viewerx = teamintx + ((1000..2000).random()).toDouble()
+                            val viewerz = teamintz + ((1000..2000).random()).toDouble()
+                            for (i in teamint.entries) {
+                                val playerlol = Bukkit.getPlayer(i)
+                                if (playerlol != null) {
+                                    playerlol.bedSpawnLocation = Location(player.world, teamintx, playerlol.location.y, teamintz)
+                                }
                             }
-                        }
-                        for (i in teamviewer!!.entries) {
-                            val playerlol = Bukkit.getPlayer(i)
-                            if (playerlol != null) {
-                                playerlol.bedSpawnLocation = Location(player.world, viewerx, playerlol.location.y, viewerz)
+                            for (i in teamviewer.entries) {
+                                val playerlol = Bukkit.getPlayer(i)
+                                if (playerlol != null) {
+                                    playerlol.bedSpawnLocation = Location(player.world, viewerx, playerlol.location.y, viewerz)
+                                }
                             }
+                            EventListener().setlife((teamintlife), (notteamintlife))
+                            player.sendMessage("세팅이 완료되었습니다!")
                         }
-                        EventListener().setlife((teamintlife), (notteamintlife))
-                        player.sendMessage("세팅이 완료되었습니다!")
+                        else {
+                            player.sendMessage("아직 팀이 만들어지지 않았습니다. /intteam add <플레이어>와 /viewer add <플레이어>를 한 번 쳐보세요.")
+                        }
                     }
                 }
             }
