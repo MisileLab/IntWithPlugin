@@ -4,6 +4,7 @@ package misilelab
 
 import io.github.monun.kommand.getValue
 import io.github.monun.kommand.kommand
+import org.apache.commons.lang.StringUtils
 import org.bukkit.Location
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
@@ -133,7 +134,7 @@ class IntWithPlugin: JavaPlugin() {
                     val notteamintlife = (prop.getProperty("notintteamlife")).toInt()
                     for (i in player.world.players) {
                         if (teamint != null && teamviewer != null) {
-                            if (!hasname(i.name, teamint) || !hasname(i.name, teamviewer)) {
+                            if (!hasname(i.name, teamint) && !hasname(i.name, teamviewer)) {
                                 noneplayers.add(i)
                             }
                         }
@@ -143,6 +144,7 @@ class IntWithPlugin: JavaPlugin() {
                             val playername = i.name
                             nonestring = "$nonestring$playername, "
                         }
+                        StringUtils.removeEnd(nonestring, ", ")
                     }
                     if (nonestring != "") {
                         player.sendMessage("$nonestring 이라는 사람(들)이 아직 팀에 참여하지 않았습니다.")
