@@ -154,8 +154,8 @@ class IntWithPlugin: JavaPlugin() {
                         if (teamint != null && teamviewer != null) {
                             val teamintx = ((-1250..1250).random()).toDouble()
                             val teamintz = ((-1256..1256).random()).toDouble()
-                            val viewerx = teamintx + ((1000..2000).random()).toDouble()
-                            val viewerz = teamintz + ((1000..2000).random()).toDouble()
+                            val viewerx = teamintx + ((1000..10000).random()).toDouble()
+                            val viewerz = teamintz + ((1000..10000).random()).toDouble()
                             for (i in teamint.entries) {
                                 val playerlol = Bukkit.getPlayer(i)
                                 if (playerlol != null) {
