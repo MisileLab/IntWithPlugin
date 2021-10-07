@@ -6,6 +6,7 @@ import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 
 var nochatting = mutableListOf<Player>()
@@ -15,29 +16,32 @@ class EventListener: Listener {
     private var notteamintlife: Int? = null
     @EventHandler
     fun onDeath(e: PlayerDeathEvent) {
-        if (((e.entity.killer == null) || (e.entity.killer!!.type == EntityType.PLAYER)) && ((teamintlife != null) && (notteamintlife != null))) {
+        if ((e.entity.killer != null) && ((teamintlife != null) && (notteamintlife != null))) {
             val player: Player = e.entity
-            if (player.name in player.scoreboard.getTeam("intteam")!!.entries) {
-                if (teamintlife!! <= 0) {
-                    player.gameMode = GameMode.SPECTATOR
-                    nochatting.add(player)
+            val nEvent: EntityDamageByEntityEvent = e.entity.lastDamageCause as EntityDamageByEntityEvent
+            if ((nEvent.damager.type == EntityType.PLAYER) || (nEvent.damager.type == EntityType.)) {
+                if (player.name in player.scoreboard.getTeam("intteam")!!.entries) {
+                    if (teamintlife!! <= 0) {
+                        player.gameMode = GameMode.SPECTATOR
+                        nochatting.add(player)
+                    }
+                    else {
+                        teamintlife = teamintlife!! - 1
+                    }
+                    val playername = player.name
+                    teammessage(true, player, "$playername 님이 사망하였습니다. 현재 $teamintlife 번 리스폰 가능합니다.")
                 }
-                else {
-                    teamintlife = teamintlife!! - 1
+                else if (player.name in player.scoreboard.getTeam("notintteam")!!.entries) {
+                    if (notteamintlife!! <= 0) {
+                        player.gameMode = GameMode.SPECTATOR
+                        nochatting.add(player)
+                    }
+                    else {
+                        notteamintlife = notteamintlife!! - 1
+                    }
+                    val playername = player.name
+                    teammessage(false, player, "$playername 님이 사망하였습니다. 현재 $notteamintlife 번 리스폰 가능합니다.")
                 }
-                val playername = player.name
-                teammessage(true, player, "$playername 님이 사망하였습니다. 현재 $teamintlife 번 리스폰 가능합니다.")
-            }
-            else if (player.name in player.scoreboard.getTeam("notintteam")!!.entries) {
-                if (notteamintlife!! <= 0) {
-                    player.gameMode = GameMode.SPECTATOR
-                    nochatting.add(player)
-                }
-                else {
-                    notteamintlife = notteamintlife!! - 1
-                }
-                val playername = player.name
-                teammessage(false, player, "$playername 님이 사망하였습니다. 현재 $notteamintlife 번 리스폰 가능합니다.")
             }
         }
     }
