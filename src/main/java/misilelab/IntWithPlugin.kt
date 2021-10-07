@@ -68,6 +68,18 @@ class IntWithPlugin: JavaPlugin() {
                         }
                     }
                 }
+                then("getlife") {
+                    executes {
+                        val player: Player = sender as Player
+                        val life = EventListener().getlife()
+                        if (life != null) {
+                            player.sendMessage((life.teamintlife).toString() + "개 남았습니다.")
+                        }
+                        else {
+                            player.sendMessage("아직 게임이 시작하지 않은 것 같습니다.")
+                        }
+                    }
+                }
             }
             register("viewer") {
                 then("add") {
@@ -109,6 +121,18 @@ class IntWithPlugin: JavaPlugin() {
                             else {
                                 playersender.sendMessage("플레이어가 팀에 이미 없습니다.")
                             }
+                        }
+                    }
+                }
+                then("getlife") {
+                    executes {
+                        val player: Player = sender as Player
+                        val life = EventListener().getlife()
+                        if (life != null) {
+                            player.sendMessage((life.notteamintlife).toString() + "개 남았습니다.")
+                        }
+                        else {
+                            player.sendMessage("아직 게임이 시작하지 않은 것 같습니다.")
                         }
                     }
                 }

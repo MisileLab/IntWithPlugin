@@ -24,8 +24,6 @@ class EventListener: Listener {
                 else {
                     teamintlife = teamintlife!! - 1
                 }
-                val playername = player.name
-                teammessage(true, player, "$playername 님이 사망하였습니다. 현재 $teamintlife 번 리스폰 가능합니다.")
             }
             else if (player.name in player.scoreboard.getTeam("notintteam")!!.entries) {
                 if (notteamintlife!! <= 0) {
@@ -35,8 +33,6 @@ class EventListener: Listener {
                 else {
                     notteamintlife = notteamintlife!! - 1
                 }
-                val playername = player.name
-                teammessage(false, player, "$playername 님이 사망하였습니다. 현재 $notteamintlife 번 리스폰 가능합니다.")
             }
         }
     }
@@ -52,17 +48,6 @@ class EventListener: Listener {
     fun setlife(teamintlifea: Int, notteamintlifea: Int) {
         teamintlife = teamintlifea
         notteamintlife = notteamintlifea
-    }
-
-    private fun teammessage(intteam: Boolean, player: Player, message: String) {
-        for (i in player.world.players) {
-            if (i.name in player.scoreboard.getTeam("notintteam")!!.entries && !intteam) {
-                player.sendMessage(message)
-            }
-            else if (i.name in player.scoreboard.getTeam("intteam")!!.entries && intteam) {
-                player.sendMessage(message)
-            }
-        }
     }
 
     data class Life(val teamintlife: Int, val notteamintlife: Int)
