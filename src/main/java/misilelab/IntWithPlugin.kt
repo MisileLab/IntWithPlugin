@@ -152,8 +152,8 @@ class IntWithPlugin: JavaPlugin() {
                     else {
                         // -250 64 256
                         if (teamint != null && teamviewer != null) {
-                            val teamintx = ((-1250..1250).random()).toDouble()
-                            val teamintz = ((-1256..1256).random()).toDouble()
+                            val teamintx = ((1000..10000).random()).toDouble()
+                            val teamintz = ((1000..10000).random()).toDouble()
                             val viewerx = teamintx + ((1000..7500).random()).toDouble()
                             val viewerz = teamintz + ((1000..7500).random()).toDouble()
                             for (i in teamint.entries) {
