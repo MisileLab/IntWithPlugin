@@ -6,32 +6,56 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.PlayerDeathEvent
+import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.scoreboard.Objective
+import org.bukkit.scoreboard.Scoreboard
+import org.bukkit.scoreboard.Team
 
 var nochatting = mutableListOf<Player>()
 
 class EventListener: Listener {
-    private var teamintlife: Int? = null
-    private var notteamintlife: Int? = null
+    private var intteamlife: Objective? = null
+    private var viewerlife: Objective? = null
+    private var scoreboard: Scoreboard? = null
+    @EventHandler
+    fun onJoin(e: PlayerJoinEvent) {
+        if (scoreboard == null) {
+            scoreboard = e.player.scoreboard
+        }
+        if (intteamlife == null) {
+            intteamlife = scoreboard?.getObjective("intteamlife")
+            if (intteamlife == null) {
+                intteamlife = scoreboard?.registerNewObjective("intteamlife", "dummy", null)
+            }
+        }
+        if (viewerlife == null) {
+            viewerlife = scoreboard?.getObjective("viewerlife")
+            if (viewerlife == null) {
+                viewerlife = scoreboard?.registerNewObjective("viewerlife", "dummy", null)
+            }
+        }
+    }
+
     @EventHandler
     fun onDeath(e: PlayerDeathEvent) {
-        if ((teamintlife != null) && (notteamintlife != null)) {
+        if ((intteamlife != null) && (viewerlife != null)) {
             val player: Player = e.entity
             if (player.name in player.scoreboard.getTeam("intteam")!!.entries) {
-                if (teamintlife!! <= 0) {
+                if (intteamlife?.getScore(player.name)?.score!! <= 0) {
                     player.gameMode = GameMode.SPECTATOR
                     nochatting.add(player)
                 }
                 else {
-                    teamintlife = teamintlife!! - 1
+                    intteamlife!!.getScore(player.name).score = intteamlife!!.getScore(player.name).score - 1
                 }
             }
             else if (player.name in player.scoreboard.getTeam("notintteam")!!.entries) {
-                if (notteamintlife!! <= 0) {
+                if (viewerlife?.getScore(player.name)?.score!! <= 0) {
                     player.gameMode = GameMode.SPECTATOR
                     nochatting.add(player)
                 }
                 else {
-                    notteamintlife = notteamintlife!! - 1
+                    viewerlife!!.getScore(player.name).score = viewerlife?.getScore(player.name)?.score!! - 1
                 }
             }
         }
@@ -45,14 +69,9 @@ class EventListener: Listener {
             player.sendMessage("당신은 채팅을 칠 수 없습니다.")
         }
     }
-    fun setlife(teamintlifea: Int, notteamintlifea: Int) {
-        teamintlife = teamintlifea
-        notteamintlife = notteamintlifea
-    }
 
-    data class Life(val teamintlife: Int, val notteamintlife: Int)
-
-    fun getlife(): Life? {
-        return if (teamintlife == null || notteamintlife == null) null else Life(teamintlife!!, notteamintlife!!)
+    fun setlife(intteamlifea: Int, viewerlifea: Int, intteam: Team, viewerteam: Team) {
+        intteamlife?.getScore(intteam.name)!!.score = intteamlifea
+        viewerlife?.getScore(viewerteam.name)!!.score = viewerlifea
     }
 }

@@ -68,18 +68,6 @@ class IntWithPlugin: JavaPlugin() {
                         }
                     }
                 }
-                then("getlife") {
-                    executes {
-                        val player: Player = sender as Player
-                        val life = EventListener().getlife()
-                        if (life != null) {
-                            player.sendMessage((life.teamintlife).toString() + "개 남았습니다.")
-                        }
-                        else {
-                            player.sendMessage("아직 게임이 시작하지 않은 것 같습니다.")
-                        }
-                    }
-                }
             }
             register("viewer") {
                 then("add") {
@@ -88,9 +76,9 @@ class IntWithPlugin: JavaPlugin() {
                             val player: Player by context
                             val playersender: Player = sender as Player
                             val scoreboard: Scoreboard = player.scoreboard
-                            var team = scoreboard.getTeam("notintteam")
+                            var team = scoreboard.getTeam("viewerteam")
                             if (team == null) {
-                                team = scoreboard.registerNewTeam("notintteam")
+                                team = scoreboard.registerNewTeam("viewerteam")
                                 team!!.setAllowFriendlyFire(false)
                             }
                             if (!hasname(player.name, team!!)) {
@@ -109,9 +97,9 @@ class IntWithPlugin: JavaPlugin() {
                             val player: Player by context
                             val playersender: Player = sender as Player
                             val scoreboard: Scoreboard = player.scoreboard
-                            var team = scoreboard.getTeam("notintteam")
+                            var team = scoreboard.getTeam("viewerteam")
                             if (team == null) {
-                                team = scoreboard.registerNewTeam("notintteam")
+                                team = scoreboard.registerNewTeam("viewerteam")
                                 team!!.setAllowFriendlyFire(false)
                             }
                             if (hasname(player.name, team!!)) {
@@ -121,18 +109,6 @@ class IntWithPlugin: JavaPlugin() {
                             else {
                                 playersender.sendMessage("플레이어가 팀에 이미 없습니다.")
                             }
-                        }
-                    }
-                }
-                then("getlife") {
-                    executes {
-                        val player: Player = sender as Player
-                        val life = EventListener().getlife()
-                        if (life != null) {
-                            player.sendMessage((life.notteamintlife).toString() + "개 남았습니다.")
-                        }
-                        else {
-                            player.sendMessage("아직 게임이 시작하지 않은 것 같습니다.")
                         }
                     }
                 }
@@ -192,7 +168,7 @@ class IntWithPlugin: JavaPlugin() {
                                     playerlol.bedSpawnLocation = Location(player.world, viewerx, playerlol.location.y, viewerz)
                                 }
                             }
-                            EventListener().setlife((teamintlife), (notteamintlife))
+                            EventListener().setlife((teamintlife), (notteamintlife), player.scoreboard.getTeam("intteam")!!, player.scoreboard.getTeam("viewerteam")!!)
                             player.sendMessage("세팅이 완료되었습니다!")
                         }
                         else {
@@ -204,20 +180,6 @@ class IntWithPlugin: JavaPlugin() {
         }
         logger.info("plugin enabled")
         server.pluginManager.registerEvents(EventListener(), this)
-    }
-
-    override fun onDisable() {
-        val lifeobject: EventListener.Life? = EventListener().getlife()
-        if (lifeobject != null) {
-            try {
-                FileInputStream("data.properties")
-            } catch (ex: FileNotFoundException) {
-                val notintteamlife = lifeobject.notteamintlife
-                val intteamlife = lifeobject.teamintlife
-                val lines = mutableListOf("intteamlife=$intteamlife", "notintteamlife=$notintteamlife")
-                Path("data.properties").createFile().writeLines(lines)
-            }
-        }
     }
 }
 
