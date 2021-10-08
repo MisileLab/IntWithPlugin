@@ -10,12 +10,6 @@ import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scoreboard.Scoreboard
 import org.bukkit.scoreboard.Team
-import java.io.FileInputStream
-import java.io.FileNotFoundException
-import java.util.*
-import kotlin.io.path.Path
-import kotlin.io.path.createFile
-import kotlin.io.path.writeLines
 import org.bukkit.Bukkit
 
 
@@ -119,21 +113,12 @@ class IntWithPlugin: JavaPlugin() {
                     val player: Player = sender as Player
                     val scoreboard: Scoreboard = player.scoreboard
                     val teamint = scoreboard.getTeam("intteam")
-                    val teamviewer = scoreboard.getTeam("notintteam")
+                    val teamviewer = scoreboard.getTeam("viewerteam")
                     var nonestring = ""
-                    try {
-                        FileInputStream("data.properties")
-                    } catch (ex: FileNotFoundException) {
-                        val lines = mutableListOf("intteamlife=30", "notintteamlife=30")
-                        Path("data.properties").createFile().writeLines(lines)
-                    }
-                    val file = FileInputStream("data.properties")
-                    val prop = Properties()
-                    prop.load(file)
-                    val teamintlife = (prop.getProperty("intteamlife")).toInt()
-                    val notteamintlife = (prop.getProperty("notintteamlife")).toInt()
                     for (i in player.world.players) {
                         if (teamint != null && teamviewer != null) {
+                            val teamintlife = scoreboard.getObjective("intteamlife")?.getScore(teamint.name)
+                            val notteamintlife = scoreboard.getObjective("intteamlife")?.getScore(teamviewer.name)
                             if (!hasname(i.name, teamint) && !hasname(i.name, teamviewer)) {
                                 noneplayers.add(i)
                             }
@@ -152,6 +137,8 @@ class IntWithPlugin: JavaPlugin() {
                     else {
                         // -250 64 256
                         if (teamint != null && teamviewer != null) {
+                            val teamintlife = scoreboard.getObjective("intteamlife")?.getScore(teamint.name)
+                            val notteamintlife = scoreboard.getObjective("intteamlife")?.getScore(teamviewer.name)
                             val teamintx = ((1000..10000).random()).toDouble()
                             val teamintz = ((1000..10000).random()).toDouble()
                             val viewerx = teamintx + ((1000..7500).random()).toDouble()
@@ -168,7 +155,7 @@ class IntWithPlugin: JavaPlugin() {
                                     playerlol.bedSpawnLocation = Location(player.world, viewerx, playerlol.location.y, viewerz)
                                 }
                             }
-                            EventListener().setlife((teamintlife), (notteamintlife), player.scoreboard.getTeam("intteam")!!, player.scoreboard.getTeam("viewerteam")!!)
+                            EventListener().setlife((teamintlife?.score!!), (notteamintlife?.score!!), player.scoreboard.getTeam("intteam")!!, player.scoreboard.getTeam("viewerteam")!!)
                             player.sendMessage("세팅이 완료되었습니다!")
                         }
                         else {
