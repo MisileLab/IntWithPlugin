@@ -50,10 +50,10 @@ class IntWithPlugin: JavaPlugin() {
                             var team = scoreboard.getTeam("intteam")
                             if (team == null) {
                                 team = scoreboard.registerNewTeam("intteam")
-                                team!!.setAllowFriendlyFire(false)
+                                team?.setAllowFriendlyFire(false)
                             }
-                            if (hasname(player.name, team!!)) {
-                                team!!.removeEntry(player.name)
+                            if (hasname(player.name, team)) {
+                                team?.removeEntry(player.name)
                                 playersender.sendMessage("플레이어가 팀에서 제거되었습니다.")
                             }
                             else {
@@ -73,10 +73,10 @@ class IntWithPlugin: JavaPlugin() {
                             var team = scoreboard.getTeam("viewerteam")
                             if (team == null) {
                                 team = scoreboard.registerNewTeam("viewerteam")
-                                team!!.setAllowFriendlyFire(false)
+                                team?.setAllowFriendlyFire(false)
                             }
-                            if (!hasname(player.name, team!!)) {
-                                team!!.addEntry(player.name)
+                            if (!hasname(player.name, team)) {
+                                team?.addEntry(player.name)
                                 playersender.sendMessage("플레이어가 팀에 넣어졌습니다.")
                             }
                             else {
@@ -94,10 +94,10 @@ class IntWithPlugin: JavaPlugin() {
                             var team = scoreboard.getTeam("viewerteam")
                             if (team == null) {
                                 team = scoreboard.registerNewTeam("viewerteam")
-                                team!!.setAllowFriendlyFire(false)
+                                team?.setAllowFriendlyFire(false)
                             }
-                            if (hasname(player.name, team!!)) {
-                                team!!.removeEntry(player.name)
+                            if (hasname(player.name, team)) {
+                                team?.removeEntry(player.name)
                                 playersender.sendMessage("플레이어가 팀에서 제거되었습니다.")
                             }
                             else {
@@ -116,10 +116,8 @@ class IntWithPlugin: JavaPlugin() {
                     val teamviewer = scoreboard.getTeam("viewerteam")
                     var nonestring = ""
                     for (i in player.world.players) {
-                        if (teamint != null && teamviewer != null) {
-                            if (!hasname(i.name, teamint) && !hasname(i.name, teamviewer)) {
-                                noneplayers.add(i)
-                            }
+                        if ((teamint != null && teamviewer != null) && (!hasname(i.name, teamint) && !hasname(i.name, teamviewer))) {
+                            noneplayers.add(i)
                         }
                     }
                     if (noneplayers.isNotEmpty()) {
@@ -153,7 +151,7 @@ class IntWithPlugin: JavaPlugin() {
                                     playerlol.bedSpawnLocation = Location(player.world, viewerx, playerlol.location.y, viewerz)
                                 }
                             }
-                            EventListener().setlife((teamintlife?.score!!), (notteamintlife?.score!!), player.scoreboard.getTeam("intteam")!!, player.scoreboard.getTeam("viewerteam")!!)
+                            EventListener().setlife((teamintlife?.score!!), (notteamintlife?.score!!))
                             player.sendMessage("세팅이 완료되었습니다!")
                         }
                         else {

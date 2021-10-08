@@ -8,32 +8,19 @@ import org.bukkit.event.Listener
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.scoreboard.Objective
+import org.bukkit.scoreboard.Score
 import org.bukkit.scoreboard.Scoreboard
-import org.bukkit.scoreboard.Team
 
 var nochatting = mutableListOf<Player>()
 
 class EventListener: Listener {
-    private var intteamlife: Objective? = null
-    private var viewerlife: Objective? = null
+    private var intteamlife: Score? = null
+    private var viewerlife: Score? = null
     private var scoreboard: Scoreboard? = null
+    private var teamlife: Objective? = null
     @EventHandler
     fun onJoin(e: PlayerJoinEvent) {
-        if (scoreboard == null) {
-            scoreboard = e.player.scoreboard
-        }
-        if (intteamlife == null) {
-            intteamlife = scoreboard?.getObjective("intteamlife")
-            if (intteamlife == null) {
-                intteamlife = scoreboard?.registerNewObjective("intteamlife", "dummy", null)
-            }
-        }
-        if (viewerlife == null) {
-            viewerlife = scoreboard?.getObjective("viewerlife")
-            if (viewerlife == null) {
-                viewerlife = scoreboard?.registerNewObjective("viewerlife", "dummy", null)
-            }
-        }
+        scoreboardsetup(e.player)
     }
 
     @EventHandler
@@ -41,21 +28,21 @@ class EventListener: Listener {
         if ((intteamlife != null) && (viewerlife != null)) {
             val player: Player = e.entity
             if (player.name in player.scoreboard.getTeam("intteam")!!.entries) {
-                if (intteamlife?.getScore(player.name)?.score!! <= 0) {
+                if (intteamlife?.score!! <= 0) {
                     player.gameMode = GameMode.SPECTATOR
                     nochatting.add(player)
                 }
                 else {
-                    intteamlife!!.getScore(player.name).score = intteamlife!!.getScore(player.name).score - 1
+                    intteamlife?.score = intteamlife?.score!! - 1
                 }
             }
-            else if (player.name in player.scoreboard.getTeam("notintteam")!!.entries) {
-                if (viewerlife?.getScore(player.name)?.score!! <= 0) {
+            else if (player.name in player.scoreboard.getTeam("viewerteam")?.entries!!) {
+                if (viewerlife?.score!! <= 0) {
                     player.gameMode = GameMode.SPECTATOR
                     nochatting.add(player)
                 }
                 else {
-                    viewerlife!!.getScore(player.name).score = viewerlife?.getScore(player.name)?.score!! - 1
+                    viewerlife?.score = viewerlife?.score!! - 1
                 }
             }
         }
@@ -70,8 +57,24 @@ class EventListener: Listener {
         }
     }
 
-    fun setlife(intteamlifea: Int, viewerlifea: Int, intteam: Team, viewerteam: Team) {
-        intteamlife?.getScore(intteam.name)!!.score = intteamlifea
-        viewerlife?.getScore(viewerteam.name)!!.score = viewerlifea
+    fun setlife(intteamlifea: Int, viewerlifea: Int) {
+        intteamlife?.score = intteamlifea
+        viewerlife?.score = viewerlifea
+    }
+
+    private fun scoreboardsetup(player: Player) {
+        scoreboard = player.scoreboard
+        if (teamlife == null) {
+            teamlife = scoreboard?.getObjective("teamlife")
+            if (teamlife == null) {
+                teamlife = scoreboard?.registerNewObjective("teamlife", "dummy", null)
+            }
+        }
+        if (viewerlife == null && teamlife != null) {
+            viewerlife = teamlife?.getScore("viewerteam")
+        }
+        if (intteamlife == null && teamlife != null) {
+            intteamlife = teamlife?.getScore("intteam")
+        }
     }
 }
