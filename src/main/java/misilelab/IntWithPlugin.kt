@@ -117,8 +117,6 @@ class IntWithPlugin: JavaPlugin() {
                     var nonestring = ""
                     for (i in player.world.players) {
                         if (teamint != null && teamviewer != null) {
-                            val teamintlife = scoreboard.getObjective("intteamlife")?.getScore(teamint.name)
-                            val notteamintlife = scoreboard.getObjective("intteamlife")?.getScore(teamviewer.name)
                             if (!hasname(i.name, teamint) && !hasname(i.name, teamviewer)) {
                                 noneplayers.add(i)
                             }
