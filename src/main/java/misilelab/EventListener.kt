@@ -1,9 +1,11 @@
 package misilelab
 
 import io.papermc.paper.event.player.AsyncChatEvent
+import net.kyori.adventure.text.Component
 import org.bukkit.GameMode
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerJoinEvent
@@ -24,7 +26,8 @@ class EventListener: Listener {
     }
 
     @EventHandler
-    fun onDeath(e: PlayerDeathEvent) {
+    fun onDeath(e: PlayerDeathEvent, priority: EventPriority = EventPriority.HIGH) {
+        scoreboardsetup(e.entity)
         if ((intteamlife != null) && (viewerlife != null)) {
             val player: Player = e.entity
             if (player.name in player.scoreboard.getTeam("intteam")!!.entries) {
@@ -49,7 +52,7 @@ class EventListener: Listener {
     }
 
     @EventHandler
-    fun onchatting(e: AsyncChatEvent) {
+    fun onchatting(e: AsyncChatEvent, eventPriority: EventPriority = EventPriority.HIGH) {
         val player: Player = e.player
         if (player in nochatting) {
             e.isCancelled = true
@@ -67,13 +70,11 @@ class EventListener: Listener {
         if (teamlife == null) {
             teamlife = scoreboard?.getObjective("teamlife")
             if (teamlife == null) {
-                teamlife = scoreboard?.registerNewObjective("teamlife", "dummy", null)
+                teamlife = scoreboard?.registerNewObjective("teamlife", "dummy", Component.text("teamlife"))
             }
         }
-        if (viewerlife == null && teamlife != null) {
+        if (teamlife != null) {
             viewerlife = teamlife?.getScore("viewerteam")
-        }
-        if (intteamlife == null && teamlife != null) {
             intteamlife = teamlife?.getScore("intteam")
         }
     }
