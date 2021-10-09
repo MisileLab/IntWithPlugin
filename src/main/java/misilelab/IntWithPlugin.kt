@@ -4,7 +4,6 @@ package misilelab
 
 import io.github.monun.kommand.getValue
 import io.github.monun.kommand.kommand
-import net.kyori.adventure.text.Component
 import org.apache.commons.lang.StringUtils
 import org.bukkit.Location
 import org.bukkit.entity.Player
@@ -134,12 +133,6 @@ class IntWithPlugin: JavaPlugin() {
                     else {
                         // -250 64 256
                         if (teamint != null && teamviewer != null) {
-                            var teamlife = scoreboard.getObjective("teamlife")
-                            if (teamlife == null) {
-                                teamlife = scoreboard.registerNewObjective("teamlife", "dummy", Component.text("teamlife"))
-                            }
-                            val notteamintlife = teamlife.getScore("viewerteam")
-                            val teamintlife = teamlife.getScore("intteam")
                             val teamintx = ((1000..10000).random()).toDouble()
                             val teamintz = ((1000..10000).random()).toDouble()
                             val viewerx = teamintx + ((1000..7500).random()).toDouble()
@@ -156,7 +149,7 @@ class IntWithPlugin: JavaPlugin() {
                                     playerlol.bedSpawnLocation = Location(player.world, viewerx, playerlol.location.y, viewerz)
                                 }
                             }
-                            EventListener().setlife((teamintlife.score), (notteamintlife.score))
+                            EventListener().setlife(30, 30)
                             player.sendMessage("세팅이 완료되었습니다!")
                         }
                         else {
