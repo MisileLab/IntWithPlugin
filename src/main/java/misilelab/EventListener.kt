@@ -64,7 +64,7 @@ class EventListener: Listener {
         viewerlife?.score = viewerlifea
     }
 
-    private fun scoreboardsetup(player: Player) {
+    fun scoreboardsetup(player: Player) {
         scoreboard = player.scoreboard
         if (teamlife == null) {
             teamlife = scoreboard?.getObjective("teamlife")

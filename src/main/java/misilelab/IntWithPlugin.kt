@@ -1,5 +1,3 @@
-@file:Suppress("PLUGIN_IS_NOT_ENABLED")
-
 package misilelab
 
 import io.github.monun.kommand.getValue
@@ -15,6 +13,8 @@ import org.bukkit.Bukkit
 
 @Suppress("unused")
 class IntWithPlugin: JavaPlugin() {
+
+    private val eventlistener = EventListener()
 
     override fun onEnable() {
         kommand {
@@ -115,6 +115,7 @@ class IntWithPlugin: JavaPlugin() {
                     val teamint = scoreboard.getTeam("intteam")
                     val teamviewer = scoreboard.getTeam("viewerteam")
                     var nonestring = ""
+                    eventlistener.scoreboardsetup(player)
                     for (i in player.world.players) {
                         if ((teamint != null && teamviewer != null) && (!hasname(i.name, teamint) && !hasname(i.name, teamviewer))) {
                             noneplayers.add(i)
@@ -149,7 +150,7 @@ class IntWithPlugin: JavaPlugin() {
                                     playerlol.bedSpawnLocation = Location(player.world, viewerx, playerlol.location.y, viewerz)
                                 }
                             }
-                            EventListener().setlife(30, 30)
+                            eventlistener.setlife(30, 30)
                             player.sendMessage("세팅이 완료되었습니다!")
                         }
                         else {
@@ -160,7 +161,7 @@ class IntWithPlugin: JavaPlugin() {
             }
         }
         logger.info("plugin enabled")
-        server.pluginManager.registerEvents(EventListener(), this)
+        server.pluginManager.registerEvents(eventlistener, this)
     }
 }
 
