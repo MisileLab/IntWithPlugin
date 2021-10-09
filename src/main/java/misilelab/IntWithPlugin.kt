@@ -13,7 +13,6 @@ import org.bukkit.Bukkit
 
 @Suppress("unused")
 class IntWithPlugin: JavaPlugin() {
-
     private val eventlistener = EventListener()
 
     override fun onEnable() {
@@ -142,12 +141,14 @@ class IntWithPlugin: JavaPlugin() {
                                 val playerlol = Bukkit.getPlayer(i)
                                 if (playerlol != null) {
                                     playerlol.bedSpawnLocation = Location(player.world, teamintx, playerlol.location.y, teamintz)
+                                    playerlol.teleport(Location(player.world, teamintx, playerlol.location.y, teamintz))
                                 }
                             }
                             for (i in teamviewer.entries) {
                                 val playerlol = Bukkit.getPlayer(i)
                                 if (playerlol != null) {
                                     playerlol.bedSpawnLocation = Location(player.world, viewerx, playerlol.location.y, viewerz)
+                                    playerlol.teleport(Location(player.world, teamintx, playerlol.location.y, teamintz))
                                 }
                             }
                             eventlistener.setlife(30, 30)
