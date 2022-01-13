@@ -1,6 +1,6 @@
 name: IntWithPlugin
 version: 0.0.2
 main: misilelab.IntWithPlugin
-api-version: 1.17
+api-version: 1.18
 libraries:
-  - io.github.monun:kommand:2.6.6
+  - io.github.monun:kommand:2.8.1
