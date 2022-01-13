@@ -1,6 +1,6 @@
 plugins {
     java
-    kotlin("jvm") version "1.5.21"
+    kotlin("jvm") version "1.6.10"
     id("com.github.johnrengelman.shadow") version "7.0.0"
 }
 
@@ -10,8 +10,8 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT")
-    implementation("io.github.monun:kommand-api:2.6.6")
+    compileOnly("io.papermc.paper:paper-api:1.18-R0.1-SNAPSHOT")
+    implementation("io.github.monun:kommand-api:2.8.1")
 }
 
 project.extra.set("packageName", name.replace(" -", ""))
