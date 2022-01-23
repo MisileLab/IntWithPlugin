@@ -9,25 +9,6 @@ import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scoreboard.Scoreboard
 import org.bukkit.scoreboard.Team
 import org.bukkit.Bukkit
-import org.bukkit.Material
-
-private val Location.groundlocation: Location
-    get() {
-        val location = this
-        while (true) {
-            if (location.block.type == Material.AIR) {
-                location.y -= 1
-                if (location.block.type != Material.AIR) {
-                    location.y += 1
-                    break
-                }
-            }
-            else {
-                location.y -= 1
-            }
-        }
-        return location
-    }
 
 @Suppress("unused")
 class IntWithPlugin: JavaPlugin() {
@@ -158,7 +139,7 @@ class IntWithPlugin: JavaPlugin() {
                             for (i in teamint.entries) {
                                 val playerlol = Bukkit.getPlayer(i)
                                 if (playerlol != null) {
-                                    val location = Location(playerlol.world, teamintx, playerlol.location.y, teamintz).groundlocation
+                                    val location = Location(playerlol.world, teamintx, playerlol.location.y, teamintz)
                                     playerlol.bedSpawnLocation = location
                                     playerlol.teleport(location)
                                 }
@@ -166,7 +147,7 @@ class IntWithPlugin: JavaPlugin() {
                             for (i in teamviewer.entries) {
                                 val playerlol = Bukkit.getPlayer(i)
                                 if (playerlol != null) {
-                                    val location = Location(playerlol.world, viewerx, playerlol.location.y, viewerz).groundlocation
+                                    val location = Location(playerlol.world, viewerx, playerlol.location.y, viewerz)
                                     playerlol.bedSpawnLocation = location
                                     playerlol.teleport(location)
                                 }
