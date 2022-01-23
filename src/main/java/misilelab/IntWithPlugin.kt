@@ -9,7 +9,25 @@ import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scoreboard.Scoreboard
 import org.bukkit.scoreboard.Team
 import org.bukkit.Bukkit
+import org.bukkit.Material
 
+private val Location.groundlocation: Location
+    get() {
+        val location = this
+        while (true) {
+            if (location.block.type == Material.AIR) {
+                location.y -= 1
+                if (location.block.type != Material.AIR) {
+                    location.y += 1
+                    break
+                }
+            }
+            else {
+                location.y -= 1
+            }
+        }
+        return location
+    }
 
 @Suppress("unused")
 class IntWithPlugin: JavaPlugin() {
@@ -131,24 +149,26 @@ class IntWithPlugin: JavaPlugin() {
                         player.sendMessage("$nonestring 이라는 사람(들)이 아직 팀에 참여하지 않았습니다.")
                     }
                     else {
-                        // -250 64 256
                         if (teamint != null && teamviewer != null) {
-                            val teamintx = ((1000..10000).random()).toDouble()
-                            val teamintz = ((1000..10000).random()).toDouble()
+                            val playerlocation = player.location
+                            val teamintx = playerlocation.x + ((1000..10000).random()).toDouble()
+                            val teamintz = playerlocation.z + ((1000..10000).random()).toDouble()
                             val viewerx = teamintx + ((1000..7500).random()).toDouble()
                             val viewerz = teamintz + ((1000..7500).random()).toDouble()
                             for (i in teamint.entries) {
                                 val playerlol = Bukkit.getPlayer(i)
                                 if (playerlol != null) {
-                                    playerlol.bedSpawnLocation = Location(player.world, teamintx, playerlol.location.y, teamintz)
-                                    playerlol.teleport(Location(player.world, teamintx, playerlol.location.y, teamintz))
+                                    val location = Location(playerlol.world, teamintx, playerlol.location.y, teamintz).groundlocation
+                                    playerlol.bedSpawnLocation = location
+                                    playerlol.teleport(location)
                                 }
                             }
                             for (i in teamviewer.entries) {
                                 val playerlol = Bukkit.getPlayer(i)
                                 if (playerlol != null) {
-                                    playerlol.bedSpawnLocation = Location(player.world, viewerx, playerlol.location.y, viewerz)
-                                    playerlol.teleport(Location(player.world, teamintx, playerlol.location.y, teamintz))
+                                    val location = Location(playerlol.world, viewerx, playerlol.location.y, viewerz).groundlocation
+                                    playerlol.bedSpawnLocation = location
+                                    playerlol.teleport(location)
                                 }
                             }
                             eventlistener.setlife(30, 30)
